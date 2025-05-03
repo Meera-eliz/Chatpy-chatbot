@@ -6,7 +6,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
 import pickle
 
-# Sample intents data
+
 intents = {
     "intents": [
         {"tag": "greeting", "patterns": ["Hi", "Hey", "Hello", "Good day", "Good morning"], "responses": ["Hello!", "Hi there!", "Greetings!"]},
@@ -19,7 +19,7 @@ intents = {
     ]
 }
 
-# Prepare training data
+
 X = []
 y = []
 
@@ -28,20 +28,20 @@ for intent in intents["intents"]:
         X.append(pattern)
         y.append(intent["tag"])
 
-# Train model
+
 model = make_pipeline(TfidfVectorizer(), MultinomialNB())
 model.fit(X, y)
 
-# Save model for future use (optional)
+
 with open('chat_model.pkl', 'wb') as file:
     pickle.dump(model, file)
 
-# Load the model (if previously saved)
+
 def load_model():
     with open('chat_model.pkl', 'rb') as file:
         return pickle.load(file)
 
-# Chat function with advanced features
+
 def chat():
     print("ChatPy: Hello! Type 'quit' to exit.")
     while True:
@@ -49,13 +49,13 @@ def chat():
         if user_input.lower() == "quit":
             print("ChatPy: Goodbye!")
             break
-        # Normalize user input (remove extra spaces, convert to lowercase)
+      
         user_input = re.sub(r'\s+', ' ', user_input).strip().lower()
 
-        # Predict the intent of the user input
+    
         prediction = model.predict([user_input])[0]
         
-        # Find corresponding responses from the intents
+     
         response_found = False
         for intent in intents["intents"]:
             if intent["tag"] == prediction:
@@ -63,7 +63,7 @@ def chat():
                 response_found = True
                 break
         
-        # Fallback response if no matching intent is found
+       
         if not response_found:
             print("ChatPy:", random.choice([response for response in intents["intents"] if response["tag"] == "default"][0]["responses"]))
 
